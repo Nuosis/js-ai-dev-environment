@@ -1,6 +1,5 @@
-
 module.exports = {
-  widgetName: "js-dev-environment-new",
+  widgetName: "jsDev",
   server: "$",
   file: "jsDev",
   uploadScript: "UploadToHTML",

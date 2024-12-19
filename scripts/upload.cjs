@@ -1,7 +1,7 @@
-const config = require("../widget.config");
+const config = require("../widget.config.cjs");
 
 const { widgetName, uploadScript, file, server } = config;
-
+console.log(config);
 console.log(widgetName, uploadScript, file, server);
 const open = require("open");
 const path = require("path");
