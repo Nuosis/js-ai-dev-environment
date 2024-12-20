@@ -1,7 +1,6 @@
 // import "./style.css";
 import { sampleData } from "./sampleData";
 const btn = document.querySelector("button");
-console.log("Hello");
 
 btn.onclick = function () {
   console.log("You ran some JavaScript");
@@ -10,9 +9,7 @@ btn.onclick = function () {
 window.loadTable = function () {
   const table = document.createElement("table");
   const tbody = document.createElement("tbody");
-  console.log(sampleData);
   sampleData.forEach((rowData, i) => {
-    console.log(rowData);
     const row = document.createElement("tr");
     const nameCell = document.createElement("td");
     const emailCell = document.createElement("td");
