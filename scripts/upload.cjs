@@ -1,15 +1,10 @@
-import open from "open";
-import path from "path";
-
-import { config } from "../widget.config.js";
+const config = require("../widget.config.cjs");
 
 const { widgetName, uploadScript, file, server } = config;
-
-// console.log(config);
-// console.log(widgetName, uploadScript, file, server);
-
-// using node >=20.11
-const __dirname = import.meta.dirname;
+console.log(config);
+console.log(widgetName, uploadScript, file, server);
+const open = require("open");
+const path = require("path");
 
 const fileUrl = `fmp://${server}/${file}?script=${uploadScript}&param=`;
 
