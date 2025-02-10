@@ -1,4 +1,4 @@
-export const config = {
+module.exports = {
   widgetName: "jsDev",
   server: "$",
   file: "jsDev",

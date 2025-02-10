@@ -1,9 +1,10 @@
-import open from "open";
-import path from "path";
-
-import { config } from "../widget.config.js";
+#!/usr/bin/env node
+const config = require("../widget.config");
 
 const { widgetName, reloadScript, file, server } = config;
+
+const open = require("open");
+const path = require("path");
 
 const fileUrl = `fmp://${server}/${file}?script=${reloadScript}`;
 
