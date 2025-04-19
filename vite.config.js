@@ -4,7 +4,7 @@ import { viteSingleFile } from "vite-plugin-singlefile";
 export default defineConfig({
   server: {
     host: "localhost",
-    port: 1234,
+    port: 1235,
   },
   plugins: [viteSingleFile()],
   build: {
