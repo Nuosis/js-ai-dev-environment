@@ -1,0 +1,240 @@
+/**
+ * Common JS Example
+ * 
+ * This file demonstrates how to use the Spinner component with FileMaker service
+ * in a vanilla JavaScript environment without any framework.
+ */
+
+// Import dependencies
+import FileMakerService from "./services/fileMakerService.js";
+import Spinner from "./components/Spinner.js";
+
+// Version logging
+console.log("v.1.0.0 - Common JS Example");
+
+/**
+ * Main application class
+ */
+class App {
+  constructor() {
+    // Initialize properties
+    this.rootElement = document.getElementById("root");
+    this.spinner = null;
+    this.spinnerContainer = null;
+    
+    // Bind methods
+    this.init = this.init.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+    this.handleResult = this.handleResult.bind(this);
+    this.handleError = this.handleError.bind(this);
+    this.renderResult = this.renderResult.bind(this);
+    this.renderError = this.renderError.bind(this);
+    
+    // Initialize the application
+    this.init();
+  }
+  
+  /**
+   * Initialize the application
+   */
+  init() {
+    // Create main container
+    this.createMainContainer();
+    
+    // Register callback
+    FileMakerService.registerCallback('handleContextResult', this.handleResult);
+    
+    // Start data fetching
+    this.fetchData();
+  }
+  
+  /**
+   * Create the main container for the application
+   */
+  createMainContainer() {
+    // Clear root element
+    if (this.rootElement) {
+      this.rootElement.innerHTML = '';
+    } else {
+      // Create root element if it doesn't exist
+      this.rootElement = document.createElement('div');
+      this.rootElement.id = 'root';
+      document.body.appendChild(this.rootElement);
+    }
+    
+    // Create header
+    const header = document.createElement('h1');
+    header.textContent = 'FileMaker SQL Schema';
+    this.rootElement.appendChild(header);
+    
+    // Create loading message
+    const loadingMessage = document.createElement('p');
+    loadingMessage.id = 'loading-message';
+    loadingMessage.textContent = 'Loading data from FileMaker...';
+    this.rootElement.appendChild(loadingMessage);
+    
+    // Create result container
+    const resultContainer = document.createElement('div');
+    resultContainer.id = 'result-container';
+    this.rootElement.appendChild(resultContainer);
+    
+    // Create spinner container
+    this.spinnerContainer = document.createElement('div');
+    this.spinnerContainer.id = 'spinner-container';
+    this.rootElement.appendChild(this.spinnerContainer);
+  }
+  
+  /**
+   * Fetch data from FileMaker
+   */
+  fetchData() {
+    // Create and show spinner
+    this.spinner = new Spinner({
+      size: 'medium',
+      color: '#0091CE'
+    });
+    this.spinner.appendTo(this.spinnerContainer);
+    
+    // Execute FileMaker script
+    FileMakerService.executeScript({
+      method: 'async',
+      script: 'JS * fetch',
+      params: {
+        action: 'returnContext',
+        callbackName: 'filemakerCallback',
+        callbackFunction: 'handleContextResult'
+      }
+    }).catch(this.handleError);
+  }
+  
+  /**
+   * Handle successful result from FileMaker
+   * @param {Object} data - Data returned from FileMaker
+   */
+  handleResult(data) {
+    // Remove spinner
+    if (this.spinner) {
+      this.spinner.remove();
+      this.spinner = null;
+    }
+    
+    // Hide loading message
+    const loadingMessage = document.getElementById('loading-message');
+    if (loadingMessage) {
+      loadingMessage.style.display = 'none';
+    }
+    
+    // Process result
+    const { json } = data;
+    
+    if (json && json.success) {
+      this.renderResult(json.schema);
+    } else {
+      this.renderError(json?.error || 'An error occurred while fetching data');
+    }
+  }
+  
+  /**
+   * Handle error from FileMaker
+   * @param {Error} error - Error object
+   */
+  handleError(error) {
+    // Remove spinner
+    if (this.spinner) {
+      this.spinner.remove();
+      this.spinner = null;
+    }
+    
+    // Hide loading message
+    const loadingMessage = document.getElementById('loading-message');
+    if (loadingMessage) {
+      loadingMessage.style.display = 'none';
+    }
+    
+    // Render error
+    this.renderError(error.message || 'An error occurred while fetching data');
+  }
+  
+  /**
+   * Render the result
+   * @param {string} schema - SQL schema string
+   */
+  renderResult(schema) {
+    const resultContainer = document.getElementById('result-container');
+    if (!resultContainer) return;
+    
+    // Clear container
+    resultContainer.innerHTML = '';
+    
+    // Create header
+    const header = document.createElement('h2');
+    header.textContent = 'SQL Schema';
+    resultContainer.appendChild(header);
+    
+    // Create pre element for schema
+    const pre = document.createElement('pre');
+    pre.textContent = schema;
+    resultContainer.appendChild(pre);
+  }
+  
+  /**
+   * Render an error message
+   * @param {string} message - Error message
+   */
+  renderError(message) {
+    const resultContainer = document.getElementById('result-container');
+    if (!resultContainer) return;
+    
+    // Clear container
+    resultContainer.innerHTML = '';
+    
+    // Create error container
+    const errorContainer = document.createElement('div');
+    errorContainer.className = 'error-container';
+    
+    // Create header
+    const header = document.createElement('h2');
+    header.textContent = 'Error';
+    errorContainer.appendChild(header);
+    
+    // Create message
+    const errorMessage = document.createElement('p');
+    errorMessage.textContent = message;
+    errorContainer.appendChild(errorMessage);
+    
+    // Append to result container
+    resultContainer.appendChild(errorContainer);
+  }
+}
+
+// Initialize the application when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  new App();
+});
+
+// This function is called by FileMaker
+window.filemakerCallback = function(data) {
+  try {
+    // Parse the JSON data
+    const parsedData = JSON.parse(data);
+    
+    // Extract the callback function name and response
+    const { callbackFunction, response, callbackId } = parsedData;
+    
+    // Get the callback function from the registry
+    const callbackFn = FileMakerService.getCallback(callbackFunction);
+    
+    // Check if the callback function exists
+    if (callbackFunction && callbackFn) {
+      // Call the function with response as json prop and callbackId if available
+      callbackFn({
+        json: response,
+        callbackId: callbackId || null
+      });
+    } else {
+      console.error(`Callback function "${callbackFunction}" not found in registry`);
+    }
+  } catch (error) {
+    console.error('Error in filemakerCallback:', error);
+  }
+};
