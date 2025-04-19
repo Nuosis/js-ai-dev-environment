@@ -103,15 +103,16 @@ const FileMakerService = {
    * @param {string|Object} props.params - Parameters to pass to the FileMaker script (will be stringified if object)
    * @returns {Promise<string>|void} - Returns a promise if method is async, otherwise void
    */
-  executeScript({ method, script = "JS * fetch", params }) {
+  executeScript({ method, script = "JS * Fetch Data", params }) {
     // Convert params to string if it's an object
     const paramString = typeof params !== 'string' ? JSON.stringify(params) : params;
 
     // Check if method is async
     if (method === 'async') {
+      // Use asynchronous method
       return FMGofer.PerformScript(script, paramString);
     } else {
-      // Use synchronous method
+      // Use synchronous method. greate for loading/initalizing state that we will need to reference later
       /*  
         param object must include a callbackName property with a default value of filemakerCallback 
         callbackId can be optionally included. When included, the result must be passed onto the action function.
