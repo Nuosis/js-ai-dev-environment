@@ -42,11 +42,9 @@ export default function Home() {
     // Make async call to FileMaker
     FileMakerService.executeScript({
       method: 'async',
-      script: 'JS * fetch',
+      script: 'JS * Fetch Data',
       params: {
-        action: 'returnContext',
-        callbackName: 'filemakerCallback',
-        callbackFunction: 'handleContextResult'
+        action: 'returnContext'
       }
     }).catch(err => {
       // Hide and remove spinner

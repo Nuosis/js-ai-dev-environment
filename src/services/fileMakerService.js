@@ -110,6 +110,54 @@ const FileMakerService = {
     // Check if method is async
     if (method === 'async') {
       // Use asynchronous method
+      /*  
+          # — UPDATE PARAMS (for testing in absence of ScriptParameter)
+            {
+              "action": "update",
+              "version": "vLatest",
+              "layout": "devTasks",
+              "action": "update",
+              "recordId": "9",
+              "fieldData": {
+                "f_completed": 1
+                ...
+              }
+            }
+
+          # — READ PARAMS (example)
+            {
+              "action": "read",
+              "version": "vLatest",
+              "layout": "devTasks",
+              "action": "read",
+              "query": [
+                {"f_active": 1}
+              ]
+            }
+          
+          # — CREATE PARAMS (commented out)
+            {
+              "action": "ceate",
+              "version": "vLatest",
+              "layouts": "devTasks",
+              "action": "create",
+              "fieldData": [
+                {"f_completed": 1},
+                {"task": "pick up pills"}
+              ]
+            }
+          # — DELETE PARAMS
+            {
+              "action": "delete",
+              "version": "vLatest",
+              "layouts": "devTasks",
+              "recordId": "9"
+            }
+          # — RETURN CONTEXT PARAMS
+            {
+              "action": "returnContext"
+            } 
+      */
       return FMGofer.PerformScript(script, paramString);
     } else {
       // Use synchronous method. greate for loading/initalizing state that we will need to reference later

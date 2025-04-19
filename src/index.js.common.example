@@ -98,11 +98,9 @@ class App {
     // Execute FileMaker script
     FileMakerService.executeScript({
       method: 'async',
-      script: 'JS * fetch',
+      script: 'JS * Fetch Data',
       params: {
-        action: 'returnContext',
-        callbackName: 'filemakerCallback',
-        callbackFunction: 'handleContextResult'
+        action: 'returnContext'
       }
     }).catch(this.handleError);
   }
