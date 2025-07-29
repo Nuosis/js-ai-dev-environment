@@ -1,6 +1,6 @@
 module.exports = {
-  widgetName: "jsDev",
+  widgetName: "Time Card Widget",
   server: "$",
-  file: "jsDev",
+  file: "TimeClock",
   uploadScript: "UploadToHTML",
 };

@@ -1,9 +1,9 @@
 {
-  "name": "js-dev-environment-new",
+  "name": "timecard-widget",
   "version": "1.0.0",
   "author": "",
   "license": "MIT",
-  "description": "Solving a client problem",
+  "description": "Timecard data visualization widget for calculating regular pay and overtime pay",
   "scripts": {
     "start": "vite",
     "reload": "node ./scripts/reload-dev",
@@ -15,17 +15,23 @@
     "start-fm-dev": "node ./scripts/start-fm-dev",
     "open-dev-browser": "open http://localhost:1234"
   },
-  "type":"module",
+  "type": "module",
   "browserslist": "> 0.5%, last 2 versions, not dead",
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-datepicker": "^8.4.0",
+    "react-dom": "^18.2.0"
+  },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
+    "fm-gofer": "^1.10.0",
     "open": "^8.2.1",
     "prettier": "2.6.2",
     "vite": "^6.0.3",
     "vite-plugin-css-injected-by-js": "^3.5.2",
-    "vite-plugin-singlefile": "^2.1.0",
-    "fm-gofer": "^1.10.0"
+    "vite-plugin-singlefile": "^2.1.0"
   },
-  "widgetType": "JS"
+  "widgetType": "React"
 }
